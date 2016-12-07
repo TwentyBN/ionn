@@ -16,6 +16,7 @@ setup(
     packages=['ionn'],
     description='io for neural networks',
     long_description=long_description,
+    install_requires=['tnt'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Topic :: Utilities',
