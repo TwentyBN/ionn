@@ -18,7 +18,7 @@ install:
     - conda info -a
 
     - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy
-    - source activated test-environment
+    - source activate test-environment
     - pip install -U pip
     - python setup.py install
     - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
