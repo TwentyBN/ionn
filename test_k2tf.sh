@@ -47,3 +47,11 @@ assert len(output) == 1, "output should contain a single tensor but contained {}
 assert np.array(output[0]).shape == (1, 4), "output tensor should have shape (1, 4)  but had {}".format(output.shape)
 assert np.all(output[0] == 0.2), "output should be all 0.2 but is {}".format(output)
 '
+
+TEST_STATUS=$?
+
+# Clean up
+rm keras_model.pb
+rm keras_model.pb.io
+
+exit $TEST_STATUS
