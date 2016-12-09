@@ -17,6 +17,9 @@ setup(
     description='io for neural networks',
     long_description=long_description,
     install_requires=['tnt'],
+    entry_points={
+        'console_scripts': ['tf-freeze=ionn.tfpb:main'],
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Topic :: Utilities',
