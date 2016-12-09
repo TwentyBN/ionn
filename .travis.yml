@@ -38,8 +38,7 @@ install:
     fi
 # command to run tests
 script:
-  # run keras backend init to initialize backend config
-  - python -c "import tensorflow"
   - python -m unittest discover tests
+  - bash tests/test_k2tf.sh
 after_success:
   - coveralls
