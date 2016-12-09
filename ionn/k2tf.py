@@ -5,32 +5,25 @@ import json
 
 from collections import namedtuple
 import keras.backend.tensorflow_backend as K
-import tensorflow as tf
 
-import numpy as np
-
-import tfpb
-
-import example_k
-import example_tf
-
+from ionn import tfpb
 
 ModelInfo = namedtuple('ModelInfo',
                        ['outputs', 'inputs', 'input_dims', 'nodes'])
 
 
-def compare_predictions():
-    keras_model = example_k.model()
-    tf_model = example_tf.model()
-
-    x = np.ones((1, 2), 'd')
-    pred_k = keras_model.predict(x)
-    with tf.Session() as sess:
-        sess.run(tf.initialize_all_variables())
-        pred_tf = sess.run(tf_model[1], feed_dict={tf_model[0]: x})
-    print('keras', pred_k)
-    print('tensorflow', pred_tf)
-    print('difference', pred_k - pred_tf)
+# def compare_predictions():
+#     keras_model = example_k.model()
+#     tf_model = example_tf.model()
+#
+#     x = np.ones((1, 2), 'd')
+#     pred_k = keras_model.predict(x)
+#     with tf.Session() as sess:
+#         sess.run(tf.initialize_all_variables())
+#         pred_tf = sess.run(tf_model[1], feed_dict={tf_model[0]: x})
+#     print('keras', pred_k)
+#     print('tensorflow', pred_tf)
+#     print('difference', pred_k - pred_tf)
 
 
 def find_io_nodes(graphdef):
@@ -119,7 +112,7 @@ def save_keras_model(model, fname='keras_model.pb', freeze=True):
     save_io(model, fname)
 
 
-def load_keras_model(fname):
+def load_keras_model(fname, session=None):
     """Load a protobuf that was stored from a keras model into tensorflow
 
     Args:
@@ -140,14 +133,15 @@ def load_keras_model(fname):
     with open('{}.io'.format(fname), 'r') as f:
         io_nodes = json.loads(f.read())
     nodes = tfpb.load_protobuf(fname,
-                               output_nodes=io_nodes['output'])
+                               output_nodes=io_nodes['output'],
+                               session=session)
     return ModelInfo(outputs=io_nodes['output'],
                      inputs=io_nodes['input'],
                      input_dims=io_nodes['input_dims'],
                      nodes=nodes)
 
 
-if __name__ == '__main__':
-    # compare_predictions()
-    model = example_k.model()
-    save_keras_model(model, freeze=True)
+# if __name__ == '__main__':
+#     # compare_predictions()
+#     model = example_k.model()
+#     save_keras_model(model, freeze=True)
