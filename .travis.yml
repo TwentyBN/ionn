@@ -4,11 +4,8 @@ language: python
 matrix:
     include:
         - python: 3.5
-          env: keras_backend=tensorflow
         - python: 3.4
-          env: keras_backend=tensorflow
         - python: 2.7
-          env: KERAS_BACKEND=tensorflow
 install:
   # code below is taken from http://conda.pydata.org/docs/travis.html
   # We do this conditionally because it saves us some downloading if the
