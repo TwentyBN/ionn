@@ -6,4 +6,3 @@ python:
     - 3.5
 script:
     - python -c "import sysconfig; print(sysconfig.get_config_var('Py_UNICODE_SIZE'))"
-    - python -c "import tensorflow"
