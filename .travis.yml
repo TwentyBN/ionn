@@ -18,12 +18,6 @@ install:
     - pip install auditwheel
 script:
     - find / -name libc.so* 2> /dev/null
+    - apt-cache policy libc6
     - pip --version
-    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-        auditwheel show tensorflow-0.12.0rc0-cp27-none-linux_x86_64.whl;
-      elif [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then
-        auditwheel show tensorflow-0.12.0rc0-cp34-cp34m-linux_x86_64.whl;
-      elif [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
-        auditwheel show tensorflow-0.12.0rc0-cp35-cp35m-linux_x86_64.whl;
-      fi
     - python -c "import tensorflow"
