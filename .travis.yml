@@ -7,7 +7,7 @@ python:
     - 3.5
 install:
     - pip install -U pip
-    - pip install tensorflow
+    - pip install tnt
     - pip install keras
 script:
     - python -m unittest discover tests
