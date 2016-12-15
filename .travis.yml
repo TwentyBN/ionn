@@ -2,13 +2,22 @@ dist: trusty
 sudo: false
 language: python
 python:
-    - 2.7
-    - 3.4
-    - 3.5
+- 2.7
+- 3.4
+- 3.5
 install:
-    - pip install -U pip
-    - pip install tensorflow
-    - pip install keras
+- pip install -U pip
+- pip install tensorflow
+- pip install keras
 script:
-    - python -m unittest discover tests
-    - bash tests/test_k2tf.sh
+- python -m unittest discover tests
+- bash tests/test_k2tf.sh
+deploy:
+  provider: pypi
+  user: ingofruend
+  password:
+    secure: cEKxy+tpLO22MWHIKGLAsjAvv3kA35/70sItrkVw/ZMYFbecWxN17I4gSQkv0+OMnxKJU4u9Z9C6n/LZwPNREjczH4I8yGu6gbmzVPRZZGy++wLc4+Mbk/iJuq7oyLeabd287tsuWGDEp6bzDu96rQ0AN8cIXrnVgdB1lBRKoJluoS7HkqcfpfY2wE5Hki9OPNVac1FBv+PkuVJ9tJ85c6VaFIVF1L5oLeY2Z/8DYMh9+s8qcdfWiM2O57Aa3TRG7YH+zxFU3OABDmOkee1VAk6/WqYpFhAlI2wAhNS/vB7KyfF1ui1YSO9NhCRXNlUNLI70ApHm3tOZa0pWTR51aoI6PnqInJLm+XZDF4E9bqgUNzJRvpqmJ9XqCOozWQAGv+Pm+cara+hZ5JiiPYRm679epScAQZ4OaDxI0zk/7oB8/agI+85MAJ5GXIW7TFqqj7nS5vlvA8NRuNVRdmJb8SnSt8Z1cJhTLBMGAIi/VF4xgv1bPOUN4YoqaKGb7SBh33SFCilN4RihsrfNV4RsgBXu20A3wzHvwk2z9Gtfw36IosjMquhYti//za90y2N204SxtEk6tzsCr/bOPpnnNbqxrBfnbsoaUEZYZ9hQL3vc0ubQg4yteef3Xce+dm+cfNbcLZ7OorSE6cJmOOYYmSvZfL+xjE59JVa4mqBFA9Y=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: TwentyBN/ionn
