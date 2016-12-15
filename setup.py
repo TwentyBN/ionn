@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from setuptools import setup
 
+import ionn
+
 try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')
@@ -10,7 +12,7 @@ except ImportError:
 
 setup(
     name='ionn',
-    version='0.0.0',
+    version=ionn.__version__,
     author='Ingo Fruend',
     author_email='ingo.fruend@twentybn.com',
     packages=['ionn'],
