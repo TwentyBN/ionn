@@ -24,7 +24,7 @@ case $1 in
         ;;
 esac
 
-echo $(cat ionn/__init__.py | sed -e "s/[0-9]*\.[0-9]*\.[0-9]*/$MAJOR.$MINOR.$FIX/") > ionn/__init__.py
+echo "__version__ = '$MAJOR.$MINOR.$FIX'" > ionn/__init__.py
 
 # This would perform the actual release (if tests pass)
 git commit ionn/__init__.py -m "Version bump"
