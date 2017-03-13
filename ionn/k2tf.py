@@ -84,13 +84,13 @@ def save_keras_model(model, fname='keras_model.pb', freeze=True):
             output tensor are supported.
         fname:
             name of the output protobuf file. The function will create a second
-            file that contains metadata needed for loading (e.g. names of output
-            nodes).
+            file that contains metadata needed for loading (e.g. names of
+            output nodes).
         freeze:
             boolean to indicate if the model should be "frozen". Note that
-            freezing means that you won't be able to further train the model and
-            you can only do prediction on a frozen model. Yet, not freezing the
-            model may loose all information about variable parameters (i.e.
+            freezing means that you won't be able to further train the model
+            and you can only do prediction on a frozen model. Yet, not freezing
+            the model may loose all information about variable parameters (i.e.
             trained weights), because those would be stored in checkpoint files
             for tensorflow that are not created by keras. Loading unfrozen
             models also don't really seem to work yet.
@@ -117,17 +117,17 @@ def load_keras_model(fname, session=None):
 
     Args:
         fname:
-            name of the protobuf file of the model. The function will look for a
-            second file with extension .io, which stores metadata needed to load
-            the protobuf.
+            name of the protobuf file of the model. The function will look for
+            a second file with extension .io, which stores metadata needed to
+            load the protobuf.
 
     Returns:
         a dictionary with the following keys:
             - input: are the names of the input nodes expected by the model
             - input_dims: are the dimensions of the input tensors
             - output: are the names of the output nodes returned by the model
-            - nodes: are the tensorflow nodes that make up the model. These will
-                already be merged with the current session
+            - nodes: are the tensorflow nodes that make up the model. These
+              will already be merged with the current session
     """
 
     with open('{}.io'.format(fname), 'r') as f:
