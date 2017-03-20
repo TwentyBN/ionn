@@ -3,23 +3,23 @@
 # turns out, the tensorflow graph manipulations that are done by the import, do
 # not work in tensorflow's test_session.
 
+set -xe
+
 python -c '
 import numpy as np
 
 from keras import backend as K
+from keras.initializers import Constant
 from keras.models import Sequential
 from keras.layers.core import Dense
 
 from ionn import k2tf
 
-def my_init(shape, name=None):
-    return K.variable(0.1*np.ones(shape, "d"), name=name)
-
 
 def model():
     network = Sequential()
     network.add(Dense(4,
-                      init=my_init,
+                      init=Constant(value=0.1),
                       activation="relu",
                       name="fc",
                       input_shape=(2,),
