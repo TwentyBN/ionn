@@ -8,8 +8,7 @@ python:
 - 3.6
 install:
 - pip install -U pip
-- pip install tensorflow
-- pip install keras
+- pip install -r requirements.txt
 script:
 - python -m unittest discover tests
 - bash tests/test_k2tf.sh
