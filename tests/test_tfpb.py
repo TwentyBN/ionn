@@ -25,7 +25,7 @@ class TestLoading(tf.test.TestCase):
         with self.graph.as_default():
             a = tf.constant([2.])
             x = tf.placeholder(tf.float32, name='input')
-            y = tf.mul(a, x, name='output')
+            y = tf.multiply(a, x, name='output')
         with self.get_session() as session:
             session.run(tfpb.initializer())
             tf.train.write_graph(

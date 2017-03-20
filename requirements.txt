@@ -1,2 +1,2 @@
 Keras~=1.1.2
-tnt~=0.12.0
+tensorflow>=1.0.0
