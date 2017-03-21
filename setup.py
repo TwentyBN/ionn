@@ -6,7 +6,7 @@ import ionn
 try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')
-except ImportError:
+except (ImportError, RuntimeError):
     long_description = ''
 
 
