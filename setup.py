@@ -3,11 +3,8 @@ from setuptools import setup
 
 import ionn
 
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except (ImportError, RuntimeError):
-    long_description = ''
+with open('README.md') as f:
+    long_description = f.read()
 
 
 setup(

@@ -1,3 +1,2 @@
-pypandoc
 Keras~=2.0
 tensorflow>=1.0
