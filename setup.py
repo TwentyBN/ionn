@@ -3,8 +3,11 @@ from setuptools import setup
 
 import ionn
 
-with open('README.md') as f:
-    long_description = f.read()
+try:
+    with open('README.md') as f:
+        long_description = f.read()
+except FileNotFoundError:
+    long_description = ''
 
 
 setup(
