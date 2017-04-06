@@ -18,6 +18,10 @@ initializer = getattr(
 )
 
 
+class NoWeightsError(Exception):
+    pass
+
+
 def load_protobuf(fname, output_nodes=('output:0',), session=None):
     """Load binary protobuf and return graph
 
@@ -69,23 +73,18 @@ def var2const(graph_def, output_nodes, session=None):
             graph definition with variable nodes
         output_nodes:
             list of nodes that will containt network output
+        session:
+            the session to use. Note that this function will only work in a
+            context where you have set session.as_default()
 
     Returns:
         graph definition with no variable nodes
     """
-    with get_default_session(session) as sess:
-        return run_init_run(
-            graph_util.convert_variables_to_constants,
-            sess, graph_def, output_nodes)
-
-
-def run_init_run(func, session, *args):
-    """Run func(session, *args) with potentially uninitialized variables"""
     try:
-        return func(session, *args)
-    except tf.errors.FailedPreconditionError:
-        # session.run(initializer())
-        return func(session, *args)
+        return graph_util.convert_variables_to_constants(
+                            session, graph_def, output_nodes)
+    except tf.errors.FailedPreconditionError as e:
+        raise NoWeightsError(e.message + 'There is no weights!')
 
 
 def load_graph_def(fname, binary=True):
@@ -120,16 +119,6 @@ def parse_graph_def(buf, binary=True):
     else:
         text_format.Merge(buf.decode('utf-8'), graph_def)
     return graph_def
-
-
-def get_default_session(session):
-    """A helper session that allows dependency injection for testing"""
-    if session is None:
-        return tf.Session()
-    elif getattr(session, '__call__', False):
-        return session()
-    else:
-        return session
 
 
 def clear_devices(graph_def):
