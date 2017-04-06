@@ -37,9 +37,8 @@ import numpy as np
 
 from ionn import k2tf
 
-specs = k2tf.load_keras_model("keras_model.pb")
-
-with tf.Session() as sess:
+with tf.Session() as sess, sess.as_default():
+    specs = k2tf.load_keras_model("keras_model.pb", session=sess)
     input_shape = tuple(1 if n is None else int(n) for n in specs.input_dims[0])
     output = sess.run(specs.outputs, feed_dict={specs.inputs[0]: np.ones(input_shape, "d")})
 

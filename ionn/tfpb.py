@@ -10,13 +10,16 @@ from google.protobuf import text_format
 import tensorflow as tf
 from tensorflow.python.framework import graph_util
 
-
 # This is a wrapper for compatibility with old style and new style tensorflow
 initializer = getattr(
     tf,
     'global_variables_initializer',
     getattr(tf, 'initialize_all_variables')
 )
+
+
+class NoWeightsError(Exception):
+    pass
 
 
 def load_protobuf(fname, output_nodes=('output:0',), session=None):
@@ -30,16 +33,18 @@ def load_protobuf(fname, output_nodes=('output:0',), session=None):
             Note that tensorflow is a bit inconsistent about this. Sometimes,
             output nodes come as '<node_name>:<output_index>', sometimes only
             '<node_name>'. We try to convert between the two if possible.
+        session:
+            the session to use. Not that this function will only work in a
+            context where you have set session.as_default()
 
     Returns:
         dictionary of nodes by name
     """
     graph_def = load_graph_def(fname, binary=True)
 
-    with get_default_session(session) as sess:
-        tf.import_graph_def(graph_def, name='')
-        return {node: sess.graph.get_tensor_by_name(node)
-                for node in output_nodes}
+    tf.import_graph_def(graph_def, name='')
+    return {node: session.graph.get_tensor_by_name(node)
+            for node in output_nodes}
 
 
 def save_protobuf(graph_def, fname, output_nodes=('output:0',),
@@ -70,23 +75,18 @@ def var2const(graph_def, output_nodes, session=None):
             graph definition with variable nodes
         output_nodes:
             list of nodes that will containt network output
+        session:
+            the session to use. Note that this function will only work in a
+            context where you have set session.as_default()
 
     Returns:
         graph definition with no variable nodes
     """
-    with get_default_session(session) as sess:
-        return run_init_run(
-            graph_util.convert_variables_to_constants,
-            sess, graph_def, output_nodes)
-
-
-def run_init_run(func, session, *args):
-    """Run func(session, *args) with potentially uninitialized variables"""
     try:
-        return func(session, *args)
-    except tf.errors.FailedPreconditionError:
-        session.run(initializer())
-        return func(session, *args)
+        return graph_util.convert_variables_to_constants(
+                            session, graph_def, output_nodes)
+    except tf.errors.FailedPreconditionError as e:
+        raise NoWeightsError(e.message + 'There is no weights!')
 
 
 def load_graph_def(fname, binary=True):
@@ -123,16 +123,6 @@ def parse_graph_def(buf, binary=True):
     return graph_def
 
 
-def get_default_session(session):
-    """A helper session that allows dependency injection for testing"""
-    if session is None:
-        return tf.Session()
-    elif getattr(session, '__call__', False):
-        return session()
-    else:
-        return session
-
-
 def clear_devices(graph_def):
     for node in graph_def.node:
         node.device = ""
@@ -140,25 +130,27 @@ def clear_devices(graph_def):
 
 
 def main(
-    input_file,
     output_file,
     checkpoint_file,
     output_node_names='output:0',
 ):
-    """Load a graph from an input file and store a frozen version"""
-    output_node_names = output_node_names.split(',')
-    load_protobuf(
-        input_file, output_nodes=output_node_names)
 
-    with tf.Session() as session:
+    session = tf.Session()
+    '''
+    Returns a context manager that makes this object the default session.
+    '''
+    with session.as_default():
         # Restore weights
-        session.run(['save/restore_all'], {'save/Const:0': checkpoint_file})
-        session.run(initializer())
+        saver = tf.train.import_meta_graph('{}.meta'.format(checkpoint_file))
+        saver.restore(session, checkpoint_file)
 
         graph_def = clear_devices(session.graph.as_graph_def())
 
-    save_protobuf(graph_def, output_file, output_node_names)
-
+        save_protobuf(graph_def,
+                      output_file,
+                      output_node_names,
+                      session=session)
+    session.close()
 
 if __name__ == '__main__':
     main()
