@@ -33,16 +33,18 @@ def load_protobuf(fname, output_nodes=('output:0',), session=None):
             Note that tensorflow is a bit inconsistent about this. Sometimes,
             output nodes come as '<node_name>:<output_index>', sometimes only
             '<node_name>'. We try to convert between the two if possible.
+        session:
+            the session to use. Not that this function will only work in a
+            context where you have set session.as_default()
 
     Returns:
         dictionary of nodes by name
     """
     graph_def = load_graph_def(fname, binary=True)
 
-    with get_default_session(session) as sess:
-        tf.import_graph_def(graph_def, name='')
-        return {node: sess.graph.get_tensor_by_name(node)
-                for node in output_nodes}
+    tf.import_graph_def(graph_def, name='')
+    return {node: session.graph.get_tensor_by_name(node)
+            for node in output_nodes}
 
 
 def save_protobuf(graph_def, fname, output_nodes=('output:0',),
