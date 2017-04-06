@@ -10,7 +10,6 @@ from google.protobuf import text_format
 import tensorflow as tf
 from tensorflow.python.framework import graph_util
 
-
 # This is a wrapper for compatibility with old style and new style tensorflow
 initializer = getattr(
     tf,
@@ -85,7 +84,7 @@ def run_init_run(func, session, *args):
     try:
         return func(session, *args)
     except tf.errors.FailedPreconditionError:
-        session.run(initializer())
+        # session.run(initializer())
         return func(session, *args)
 
 
@@ -140,7 +139,6 @@ def clear_devices(graph_def):
 
 
 def main(
-    input_file,
     output_file,
     checkpoint_file,
     output_node_names='output:0',
