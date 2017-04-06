@@ -143,10 +143,6 @@ def main(
     checkpoint_file,
     output_node_names='output:0',
 ):
-    """Load a graph from an input file and store a frozen version"""
-    output_node_names = output_node_names.split(',')
-    load_protobuf(
-        input_file, output_nodes=output_node_names)
 
     with tf.Session() as session:
         # Restore weights
