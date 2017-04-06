@@ -144,15 +144,22 @@ def main(
     output_node_names='output:0',
 ):
 
-    with tf.Session() as session:
+    session = tf.Session()
+    '''
+    Returns a context manager that makes this object the default session.
+    '''
+    with session.as_default():
         # Restore weights
-        session.run(['save/restore_all'], {'save/Const:0': checkpoint_file})
-        session.run(initializer())
+        saver = tf.train.import_meta_graph('{}.meta'.format(checkpoint_file))
+        saver.restore(session, checkpoint_file)
 
         graph_def = clear_devices(session.graph.as_graph_def())
 
-    save_protobuf(graph_def, output_file, output_node_names)
-
+        save_protobuf(graph_def,
+                      output_file,
+                      output_node_names,
+                      session=session)
+    session.close()
 
 if __name__ == '__main__':
     main()
