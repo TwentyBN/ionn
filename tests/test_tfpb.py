@@ -163,9 +163,9 @@ class TestVariablesAfterSaving(tf.test.TestCase):
                 for i in range(10):
                     self.session.run(optimizer, feed_dict={x: 1, z: 10})
 
-    def test_trained_graph(self):
+    def save_graph_reload_and_check(self, graph_builder, expected_output):
         with self.session.as_default():
-            self.build_trained_graph()
+            graph_builder()
             tfpb.save_protobuf(self.session.graph.as_graph_def(),
                                self.fname,
                                output_nodes=('Output:0',),
