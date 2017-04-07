@@ -141,7 +141,7 @@ class TestVariablesAfterSaving(tf.test.TestCase):
     def build_constant_graph(self):
         with self.graph.as_default():
             x = tf.placeholder("float", name='Input')
-            w = tf.constant(10., name='Factor')
+            w = tf.constant(1., name='Factor')
             tf.multiply(w, x, name='Output')
 
     def build_variable_graph(self):
