@@ -175,9 +175,23 @@ class TestVariablesAfterSaving(tf.test.TestCase):
                                       output_nodes=('Output:0',),
                                       session=self.session)
             loaded_value = self.session.run(list(node.values())[0],
-                                            feed_dict={'Input:0': 1.,
-                                                       'Target:0': 10.})
-        self.assertNotEqual(loaded_value, 10.)
+                                            feed_dict={'Input:0': 1})
+        return loaded_value == expected_output
+
+    def test_constant_graph(self):
+        self.assertEqual(True,
+                         self.save_graph_reload_and_check(self.build_constant_graph,
+                                                          10.))
+
+    def test_variable_graph(self):
+        self.assertEqual(True,
+                         self.save_graph_reload_and_check(self.build_variable_graph,
+                                                          1.))
+
+    def test_trained_graph(self):
+        self.assertNotEqual(True,
+                            self.save_graph_reload_and_check(self.build_variable_graph,
+                                                             10.))
 
 
 if __name__ == '__main__':
