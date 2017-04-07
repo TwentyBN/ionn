@@ -144,42 +144,12 @@ class TestVariablesAfterSaving(tf.test.TestCase):
             w = tf.constant(10., name='Factor')
             tf.multiply(w, x, name='Output')
 
-    def test_constant_graph(self):
-        with self.session.as_default():
-            self.build_constant_graph()
-            tfpb.save_protobuf(self.session.graph.as_graph_def(),
-                               self.fname,
-                               output_nodes=('Output:0',),
-                               freeze=True,
-                               session=self.session)
-            node = tfpb.load_protobuf(self.fname,
-                                      output_nodes=('Output:0',),
-                                      session=self.session)
-            loaded_value = self.session.run(list(node.values())[0],
-                                            feed_dict={'Input:0': 1})
-        self.assertEqual(loaded_value, 10.)
-
     def build_variable_graph(self):
         with self.graph.as_default():
             x = tf.placeholder("float", name='Input')
             w = tf.Variable(np.array([1.]), name='Factor', dtype=tf.float32)
             tf.multiply(w, x, name='Output')
             self.session.run(tf.global_variables_initializer())
-
-    def test_variable_graph(self):
-        with self.session.as_default():
-            self.build_variable_graph()
-            tfpb.save_protobuf(self.session.graph.as_graph_def(),
-                               self.fname,
-                               output_nodes=('Output:0',),
-                               freeze=True,
-                               session=self.session)
-            node = tfpb.load_protobuf(self.fname,
-                                      output_nodes=('Output:0',),
-                                      session=self.session)
-            loaded_value = self.session.run(list(node.values())[0],
-                                            feed_dict={'Input:0': 1.})
-        self.assertEqual(loaded_value, 1.)
 
     def build_trained_graph(self):
         with self.graph.as_default():
