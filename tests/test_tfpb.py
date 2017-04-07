@@ -163,7 +163,7 @@ class TestVariablesAfterSaving(tf.test.TestCase):
                 for i in range(10):
                     self.session.run(optimizer, feed_dict={x: 1, z: 10})
 
-    def save_graph_reload_and_check(self, graph_builder, expected_output):
+    def save_graph_and_reload(self, graph_builder):
         with self.session.as_default():
             graph_builder()
             tfpb.save_protobuf(self.session.graph.as_graph_def(),
@@ -171,27 +171,25 @@ class TestVariablesAfterSaving(tf.test.TestCase):
                                output_nodes=('Output:0',),
                                freeze=True,
                                session=self.session)
+            tf.reset_default_graph()
             node = tfpb.load_protobuf(self.fname,
                                       output_nodes=('Output:0',),
                                       session=self.session)
             loaded_value = self.session.run(list(node.values())[0],
                                             feed_dict={'Input:0': 1})
-        return loaded_value == expected_output
+        return loaded_value
 
     def test_constant_graph(self):
-        self.assertEqual(True,
-                         self.save_graph_reload_and_check(self.build_constant_graph,
-                                                          10.))
+        self.assertEqual(1.,
+                         self.save_graph_and_reload(self.build_constant_graph))
 
     def test_variable_graph(self):
-        self.assertEqual(True,
-                         self.save_graph_reload_and_check(self.build_variable_graph,
-                                                          1.))
+        self.assertEqual(1.,
+                         self.save_graph_and_reload(self.build_variable_graph))
 
     def test_trained_graph(self):
-        self.assertNotEqual(True,
-                            self.save_graph_reload_and_check(self.build_variable_graph,
-                                                             10.))
+        self.assertNotEqual(1.,
+                            self.save_graph_and_reload(self.build_trained_graph))
 
 
 if __name__ == '__main__':
