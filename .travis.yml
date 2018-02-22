@@ -14,10 +14,12 @@ script:
 - bash tests/test_k2tf.sh
 deploy:
   provider: pypi
-  user: ingofruend
+  user: twentybn-machine-user
   password:
-    secure: cEKxy+tpLO22MWHIKGLAsjAvv3kA35/70sItrkVw/ZMYFbecWxN17I4gSQkv0+OMnxKJU4u9Z9C6n/LZwPNREjczH4I8yGu6gbmzVPRZZGy++wLc4+Mbk/iJuq7oyLeabd287tsuWGDEp6bzDu96rQ0AN8cIXrnVgdB1lBRKoJluoS7HkqcfpfY2wE5Hki9OPNVac1FBv+PkuVJ9tJ85c6VaFIVF1L5oLeY2Z/8DYMh9+s8qcdfWiM2O57Aa3TRG7YH+zxFU3OABDmOkee1VAk6/WqYpFhAlI2wAhNS/vB7KyfF1ui1YSO9NhCRXNlUNLI70ApHm3tOZa0pWTR51aoI6PnqInJLm+XZDF4E9bqgUNzJRvpqmJ9XqCOozWQAGv+Pm+cara+hZ5JiiPYRm679epScAQZ4OaDxI0zk/7oB8/agI+85MAJ5GXIW7TFqqj7nS5vlvA8NRuNVRdmJb8SnSt8Z1cJhTLBMGAIi/VF4xgv1bPOUN4YoqaKGb7SBh33SFCilN4RihsrfNV4RsgBXu20A3wzHvwk2z9Gtfw36IosjMquhYti//za90y2N204SxtEk6tzsCr/bOPpnnNbqxrBfnbsoaUEZYZ9hQL3vc0ubQg4yteef3Xce+dm+cfNbcLZ7OorSE6cJmOOYYmSvZfL+xjE59JVa4mqBFA9Y=
+    secure: "NvZ5dDQQafsqM4MxDuk/FowSWA8EFPv+C98VB2aP7tmRaAD/EaET6ozRfF7oI9Q5GRJEcPgfG/p+RPL1wlVLcVQJWmkAmSVViupF774h2ii5dkCGFl1v7edA6CBFPoZkqBs02mOmAKrqfnI3DfqUurQEEhA+2So2aVqT3uxM0zwO5Db25JJscCylqyzIIc82u0pTw+a2FXRS2cS2YXuh+mLYxgav7M5Ra2giTyGpY4J+LFdGH2s79n9Fy2AgdtMEnOtC2sKl18tpE0aRBV4IZl0vmof2Iz+xtuUru1mFtNrQS59YyD1fD8e/ok9gjRzMIG/gu/EX9eUkzKiuHmFpNODuvBwlJVWvlw7tW/L0i4h/lra1UDRHq8gTbBLnF2uE/969+a6xM6sUwN+56xuili4HvVu6W1iYh/dx+qj73agGJAXpYLABEBO6stInjIX5rOADkpC9lE5Zr2FUI28aXw4dn7EhWPb/NrKgG8Dr/jaG+D+T0BTLacmE3zPj7ICw7tlxknePAYPlAjBgrCJ5JD2tpEsjJtX5ID3FRiaPE8f2xDr8CZyf4D9U57/criRfJLRzebFouMr0B8ip3GJf6sDSh8WdD1vm+eVZ2sx6xhhnhyb6u6WQAIY7YPDMuThg3LIs1XAt8GIZye2qstfbiPRPN/vLZu74z6PSVpea05o="
   on:
     tags: true
     distributions: sdist bdist_wheel
     repo: TwentyBN/ionn
+    python: '3.6'
+    branch: master
