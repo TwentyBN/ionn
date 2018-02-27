@@ -8,6 +8,7 @@ python:
 - 3.6
 install:
 - pip install -U pip
+- pip install -U numpy  # numpy installed on travis was too old
 - pip install -r requirements.txt
 script:
 - python -m unittest discover tests
